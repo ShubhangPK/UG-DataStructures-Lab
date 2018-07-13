@@ -1,0 +1,96 @@
+#define stacksize 50
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <ctype.h>
+struct stack
+{
+ int top;
+ float item[stacksize];
+};
+typedef struct stack STACK;
+void push(STACK*S,float ele)
+{
+    if(S->top==stacksize-1)
+        printf("stack is full.");
+    else
+        S->item[++S->top]=ele;
+}
+int empty(STACK*S)
+{
+ return(S->top==-1);
+}
+float pop(STACK*S)
+{
+    if(empty(S))
+    printf("stack empty.");
+    else
+    return(S->item[S->top--]);
+}
+float evaluate(float op1,float op2,char op)
+{
+    switch(op)
+    {
+        case '+':return(op1+op2);
+                    break;
+        case '-':return(op1-op2);
+                    break;
+        case '*':return(op1*op2);
+                    break;
+        case '/': if(op2==0)
+                  {printf("number can't be divided by zero.");
+                   exit(0);
+                  }
+                  else
+                  return(op1/op2);
+                    break;
+        case '$':
+        case '^':return(pow(op1,op2));
+                    break;
+        default: printf("invalid choice.");
+
+        }
+}
+int main()
+{
+    STACK opstk;
+    opstk.top=-1;
+    char postfix[30],symb;
+    int i=0;
+    float op1,op2,result=0;
+    printf("enter your expression:");
+    gets(postfix);
+    while((symb=postfix[i++])!='\0')
+    {
+        if(isdigit(symb))
+            {
+               push(&opstk,(float)(symb-'0'));
+             //printf("%f pushed\n",(float)(symb-'0'));
+            }
+        else
+        {
+            if (empty(&opstk))
+                {
+                    printf("invalid 1.");
+                    exit(0);
+                }
+
+            op2=pop(&opstk);
+
+            if (empty(&opstk))
+            {
+                printf("invalid 2");
+                exit(0);
+            }
+            op1=pop(&opstk);
+            result=evaluate(op1,op2,symb);
+            push(&opstk,result);
+        }
+    }
+
+      result=pop(&opstk);
+      if (!empty(&opstk))
+      printf("invalid expression.");
+      printf("result is:%f",result);
+      return(0);
+}

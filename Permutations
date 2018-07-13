@@ -1,0 +1,38 @@
+#include<stdio.h>
+#include<math.h>
+int fact(int n)
+{ int i,j,fact,fact2;
+	for(i=0;i<n;i++)
+	{
+		fact=n*n-1;
+		return fact;
+	}
+	}
+	int fact2(int m)
+	{int j,fact2;
+		for(j=0;j<m;j++)
+	{
+		fact2=m*(m-1);
+		return fact2;
+	}
+	}
+void main()
+{
+	int m,p,n,fact,fact2,r,d;
+	printf("To find the permutation of n objects taken r at a time:");
+	printf("\nEnter the value of n and r");
+	scanf("%d%d",&n,&r);
+	while(n>r)
+{
+	if(n==0)
+	return 1;
+	fact=fact*(fact-1);
+	m=(n-r);
+	if(m==0)
+	return 1;
+	fact2=fact2*(fact2-1);
+	p=fact/fact2;
+	return p;
+}
+printf("The permutation required is %d",p);
+}

@@ -1,0 +1,110 @@
+#include<stdio.h>
+#include<stdlib.h>
+#define null 0
+
+
+struct node
+{
+int info;
+struct node *left,*right;
+};
+ typedef struct node *nodeptr;
+
+nodeptr getnode()
+{
+return((nodeptr)malloc(sizeof(struct node)));
+}
+
+
+nodeptr maketree(int ele)
+{
+nodeptr new=getnode();
+new->info=ele;
+new->left=new->right=NULL;
+return(new);
+}
+
+int isleft(nodeptr p)
+{
+return(p->left!=null);
+}
+
+
+int isright(nodeptr p)
+{
+return(p->right!=null);
+}
+
+void setleft(nodeptr p,int ele)
+{
+nodeptr new;
+if(isleft(p))
+printf("left son exists");
+else
+{
+new=getnode();
+new->info=ele;
+new->left=new->right=NULL;
+p->left=new;
+}
+}
+
+void setright(nodeptr p,int ele)
+{
+nodeptr new;
+if(isright(p))
+printf("right son exists");
+else
+{
+new=getnode();
+new->info=ele;
+new->left=new->right=NULL;
+p->right=new;
+}
+}
+
+void construct(nodeptr root,int ele)
+{
+nodeptr father,son;
+while(ele!=0)
+{
+scanf("%d",&ele);
+father=son=root;
+while(son!=null)
+{
+father=son;
+if(ele<father->info)
+{
+son=father->left;
+}
+else
+son=father->right;
+}
+if(ele<father->info)
+setleft(father,ele);
+else
+setright(father,ele);
+}
+}
+
+void preorder(nodeptr tree)
+{
+if(tree!=NULL)
+{
+printf("%d\n",tree->info);
+preorder(tree->left);
+preorder(tree->right);
+}
+}
+
+void main()
+{
+nodeptr root;
+int ele;
+printf("enter first element\n");
+scanf("%d",&ele);
+root=maketree(ele);
+construct(root,ele);
+preorder(root);
+
+}

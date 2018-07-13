@@ -1,0 +1,268 @@
+#include<stdio.h>
+#include<malloc.h>
+struct node
+{
+int info;
+struct node *right;
+struct node *left;
+};
+typedef struct node *nodeptr;
+
+nodeptr getnode()
+{
+return((nodeptr)malloc(sizeof(struct node)));
+}
+void freenode(nodeptr p)
+{
+free(p);
+}
+
+void insfront(nodeptr *dlist,int ele)
+{
+ nodeptr new=getnode();
+ new->info=ele;
+ new->right=NULL;
+ new->left=NULL;
+ if(*dlist==NULL)
+ {
+  *dlist=new;
+ }
+ else
+ {
+  new->right=*dlist;
+  (*dlist)->left=new;
+  *dlist=new;
+ }
+}
+void insend(nodeptr *dlist, int ele)
+{
+nodeptr newnode,curr;
+curr=*dlist;
+newnode=getnode();
+newnode->info=ele;
+newnode->right=NULL;
+if(*dlist == NULL)
+{
+newnode->left=NULL;
+*dlist= newnode;
+}
+else
+{
+while(curr->right!=NULL)
+curr=curr->right;
+(curr)->right=newnode;
+(newnode)->left=curr;
+}
+}
+void display(nodeptr *dlist)
+{
+nodeptr curr;
+curr=*dlist;
+if(*dlist==NULL)
+printf("empty");
+else
+{
+while(curr!=NULL)
+{
+printf("%d\n",curr->info);
+curr=curr->right;
+}
+}
+}
+void delend(nodeptr *dlist)
+{
+nodeptr curr;
+curr=*dlist;
+if(*dlist == NULL)
+printf("empty list");
+else{
+while(curr->right!=NULL)
+{
+curr=curr->right;
+}
+if(curr == *dlist)
+*dlist = NULL;
+else
+{
+(curr->left)->right=NULL;
+freenode(curr);
+}
+}
+}
+void delfront(nodeptr *dlist)
+{
+nodeptr curr;
+curr=*dlist;
+if(*dlist==NULL)
+{
+printf("empty list");
+}
+else
+{
+*dlist=curr->right;
+(curr->right)->left=NULL;
+free(curr);
+}
+}
+void insnth(nodeptr *dlist,int ele,int n)
+{
+nodeptr curr,new,prev=NULL;
+int count=1;
+curr=*dlist;
+new=getnode();
+new->info=ele;
+new->right=NULL;
+new->left=NULL;
+while(curr!=NULL&&count!=n)
+{
+prev=curr;
+curr=curr->right;
+count++;
+}
+if(n==1)
+{
+new->right=*dlist;
+(*dlist)->left=new;
+*dlist=new;
+}
+else
+if(curr==NULL&&count==n)
+{
+prev->right=new;
+new->left=prev;
+}
+else
+{
+(curr->left)->right=new;
+new->left=curr->left;
+new->right=curr;
+}
+}
+
+void delnth(nodeptr *dlist,int n)
+{
+nodeptr curr;
+int count = 1;
+curr = *dlist;
+if(*dlist==NULL)
+printf("deletion not possible");
+while(curr!=NULL&&count!=n)
+{
+curr=curr->right;
+count++;
+}
+if(n==1)
+{
+if(curr->right==NULL)
+{
+*dlist=NULL;
+}
+else
+{
+(curr->right)->left=NULL;
+*dlist=curr->right;
+}
+freenode(curr);
+}
+
+else
+{
+if(curr->right!=NULL)
+{
+(curr->left)->right=(curr->right);
+(curr->right)->left=curr->left;
+}
+else
+(curr->left)->right=NULL;
+freenode(curr);
+}
+}
+
+void order(nodeptr *dlist,int ele)
+{
+nodeptr curr=*dlist,prev=NULL;
+nodeptr new;
+new=getnode();
+new->info=ele;
+new->right=NULL;
+new->left=NULL;
+if(*dlist==NULL)
+*dlist=new;
+else
+{
+while(curr!=NULL&&(new->info)>(curr->info))
+{
+prev=curr;
+curr=curr->right;
+}
+if(curr==*dlist)
+{
+new->right=curr;
+new->left=NULL;
+curr->left=new;
+*dlist=new;
+}
+ if(curr==NULL)
+{
+prev->right=new;
+new->left=prev;
+new->right=NULL;
+}
+else
+{
+prev->right=new;
+new->left=prev;
+new->right=curr;
+curr->left=new;
+}
+}
+}
+
+
+
+
+
+
+void main()
+{
+nodeptr dlist=NULL;
+int ele,n,ch;
+do
+{
+printf("1 to insfront 2 to insend 3 to display 4 to delfront 5 to delend 6 to insnth 7 to delnth 8 to sort\n");
+scanf("%d",&ch);
+switch(ch)
+{
+
+
+case 1 : printf("enter the element to be inserted"); 
+         scanf("%d",&ele);
+         insfront(&dlist,ele);
+         break;
+case 2 : printf("enter the element to be inserted");
+         scanf("%d",&ele);
+         insend(&dlist,ele);
+         break;
+case 3 : display(&dlist);
+         break;
+case 4 : delfront(&dlist);
+         break;
+case 5 : delend(&dlist);
+         break;
+case 6 : printf("enter the element to be inserted and position");
+         scanf("%d",&ele);
+         scanf("%d",&n);
+         insnth(&dlist,ele,n);
+         break;
+case 7 : printf("enter the position");
+         scanf("%d",&n);
+         delnth(&dlist,n);
+         break;
+case 8 : printf("enter the element");
+         scanf("%d",&ele);
+         order(&dlist,ele);
+         break;
+      
+}
+}while(ch<9);
+}

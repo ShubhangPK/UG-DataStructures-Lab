@@ -1,0 +1,68 @@
+#define stacksize 5
+#include<stdio.h>
+struct stack
+{
+	int items[stacksize];
+	int top;
+};
+typedef struct stack STACK;
+void push(STACK *s,int ele)
+{
+	if(s->top==stacksize-1)
+	{
+		printf("Stack is full");
+	    exit(0);
+	}
+	else
+	s->items[++s->top]=ele;
+}
+int stackempty(STACK *s)
+{
+	return(s->top==-1);
+}
+void pop(STACK *s,int *ele,int *flag)
+{
+	*flag=0;
+	if(stackempty(s))
+	{
+		printf("Stack is empty\n");
+		*flag=1;
+	}
+	else
+	*ele=s->items[s->top--];
+}
+void display(STACK s)
+{
+	int i;
+	for(i=0;i<=s.top;i++)
+	{
+	printf("\n%d\n",s.items[i]);
+}
+}
+void main()
+{
+	STACK s;
+	int choice,uflag,ele;
+	s.top=-1;
+	do{
+		printf("1.PUSH 2.POP 3.DISPLAY\n");
+		scanf("%d", &choice);
+		switch(choice)
+		{
+			case 1:printf("Enter the element to be pushed\n");
+			scanf("%d",&ele);
+			push(&s,ele);
+			break;
+			case 2:pop(&s,&ele,&uflag);
+			if(uflag=0)
+			printf("Popped=%d\n",ele);
+			break;
+			case 3:printf("The stack contains:");
+			display(s);
+			break;
+			default:printf("Invalid choice\n");
+			exit(0);	
+		}
+	}while(choice<=4);
+}
+

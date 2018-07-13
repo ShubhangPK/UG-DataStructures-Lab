@@ -1,0 +1,70 @@
+#define MAXQ 50
+#include <stdio.h>
+#include<stdlib.h>
+struct queue
+{
+    int items[MAXQ];
+    int front,rear;
+};
+typedef struct queue QUEUE;
+int qempty(QUEUE *q)
+{
+    return(q->front>q->rear);
+}
+int qfull(QUEUE *q1)
+{
+    return(q1->rear==MAXQ-1);
+}
+void qinsert(QUEUE *q3,int ele)
+{
+    if(qfull(q3))
+        printf("QUEUE IS FULL");
+    q3->items[++q3->rear]=ele;
+    if(qfull(q3))
+        printf("queue is full");
+}
+void qremove(QUEUE *q4,int *ele)
+{
+    if(qempty(q4))
+    {
+        printf("queue is empty.");
+        exit(0);
+    }
+    *ele=q4->items[q4->front++];
+    if(q4->front>q4->rear)
+        printf("queue is empty");
+}
+void qdisplay(QUEUE *q4)
+{   if(qempty(q4))
+    printf("queue is empty.");
+    int i;
+    for(i=q4->front;i<=q4->rear;i++)
+        printf("%d\t",q4->items[i]);
+}
+
+int main()
+{ QUEUE q5;
+  q5.front=0;
+  q5.rear=-1;
+  int choice,d,x;
+do{
+  printf("\nQUEUE\n");
+  printf("1add\n2remove\n3display");
+  printf("\nenter your choice:");
+  scanf("%d",&choice);
+  switch(choice)
+  {
+      case 1:printf("enter the element to be inserted:\n");
+             scanf("%d",&d);
+             qinsert(&q5,d);
+             break;
+      case 2:qremove(&q5,&x);
+             printf("\nelement removed is %d",x);
+             break;
+      case 3:qdisplay(&q5);
+             break;
+      default:printf("wrong choice\n");
+  }
+}while(choice>0&&choice<4);
+return 0;
+}

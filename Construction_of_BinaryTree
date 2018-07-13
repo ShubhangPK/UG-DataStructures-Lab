@@ -1,0 +1,72 @@
+#include<stdio.h>
+#include<stdlib.h>
+#define null 0
+
+
+struct node
+{
+int info;
+struct node *left,*right;
+};
+ typedef struct node *nodeptr;
+
+nodeptr getnode()
+{
+return((nodeptr)malloc(sizeof(struct node)));
+}
+
+nodeptr create()
+{
+nodeptr new;
+int ele;
+printf("enter the data and if there is no son enter, enter -1\n");
+scanf("%d",&ele);
+if(ele==-1)
+return NULL;
+new=getnode();
+new->info=ele;
+printf("for the left son of %d\n",ele);
+new->left=create();
+printf("for the right son of %d\n",ele);
+new->right=create();
+return(new);
+}
+
+void preorder(nodeptr tree)
+{
+
+if(tree!=NULL)
+{
+printf("\n%d\n",tree->info);
+preorder(tree->left);
+preorder(tree->right);
+}
+}
+void inorder(nodeptr tree)
+{
+	if(tree!=NULL)
+	{
+		inorder(tree->left);
+		printf("\n%d\n",tree->info);
+		inorder(tree->right);
+	}
+}
+void postorder(nodeptr tree)
+{
+	if(tree!=NULL)
+	{
+		postorder(tree->left);
+		postorder(tree->right);
+		printf("\n%d\n",tree->info);
+	}
+}
+
+void main()
+{
+nodeptr tree=null;
+tree=create();
+printf("contents are:\n");
+preorder(tree);
+inorder(tree);
+postorder(tree);
+}

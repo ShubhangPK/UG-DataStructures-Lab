@@ -1,0 +1,124 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<math.h>
+#include<ctype.h>
+#define null 0
+
+
+struct node
+{
+int info;
+struct node *left,*right;
+};
+ typedef struct node *nodeptr;
+
+struct stack
+{
+int top;
+nodeptr items[50];
+}s;
+typedef struct stack STACK;
+
+nodeptr getnode()
+{
+return((nodeptr)malloc(sizeof(struct node)));
+}
+
+void push(STACK *s,nodeptr ele)
+{
+if(s->top==19)
+{
+printf("stack is full");
+exit(0);
+}
+else
+s->items[++(s->top)]=ele;
+}
+nodeptr pop(STACK *s)
+{
+nodeptr ele;
+if(s->top==-1)
+{
+printf("stack is empty");
+return(null);
+}
+else
+{
+ele=s->items[(s->top)--];
+return(ele);
+}
+}
+
+nodeptr exptree(char postfix[])
+{
+nodeptr newnode;
+char symb;
+int i=0;
+
+while((symb=postfix[i++])!='\0')
+{
+if(isdigit(symb))
+{
+newnode=getnode();
+newnode->info=symb;
+newnode->left=NULL;
+newnode->right=NULL;
+push(&s,newnode);
+}
+else
+{
+newnode=getnode();
+newnode->info=symb;
+newnode->left=pop(&s);
+newnode->right=pop(&s);
+push(&s,newnode);
+}
+}
+return(pop(&s));
+}
+
+
+float oper(float a,char symb,float b)
+{
+switch(symb)
+{
+case '+' : return(a+b);
+case '-' : return(a-b);
+case '/' :if(b==0)
+	  {
+	  printf("divide by zero");
+	  return(-1);
+	  }
+	  return(a/b);
+case '*' : return(a*b);
+case '^' : return(pow(a,b));
+}
+}
+float evalbintree(nodeptr tree)
+{
+float oper1,oper2;
+char symb;
+if(isdigit(tree->info))
+{
+return((float)((tree->info)-'0'));
+}
+else
+{
+oper1= evalbintree(tree->left);
+oper2=evalbintree(tree->right);
+symb=tree->info;
+return(oper(oper1,symb,oper2));
+}
+}
+void main()
+{
+
+nodeptr tree;
+char postfix[20];
+float result;
+printf("enter a postfix expression");
+gets(postfix);
+tree=exptree(postfix);
+result=evalbintree(tree);
+printf("%f",result);
+}

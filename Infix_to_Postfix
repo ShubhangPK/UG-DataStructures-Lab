@@ -1,0 +1,115 @@
+#define max 50
+#include <stdio.h>
+#include <stdlib.h>
+#include<ctype.h>
+struct stack{
+int top;
+char item[max];
+};
+typedef struct stack STACK;
+void push(STACK *s,int ele)
+{
+    if(s->top==max-1)
+        printf("stack is full.");
+    else
+        s->item[++s->top]=ele;
+}
+char pop(STACK *s1)
+{
+
+        return(s1->item[s1->top--]);
+}
+int priority(char op)
+{
+    switch(op)
+    {
+        case '(': return(0);
+                   break;
+        case '+':
+        case '-': return(1);
+                   break;
+        case '*':
+        case '/': return(2);
+                   break;
+        case '^':
+        case '$': return(3);
+                   break;
+        default:  printf("wrong choice.");
+                   exit(0);
+    }
+}
+int precedence(char op1,char op2)
+{
+    if(op1=='^'||op1=='$')
+        return(1);
+    else
+        return(priority(op1)>priority(op2));
+}
+int isempty(STACK*s3)
+{
+    return(s3->top==-1);
+}
+void infixpostfix(char infix[],char postfix[])
+{
+    STACK opstk;
+    opstk.top=-1;
+    int i=0,j=0;
+    char symb,topsymb;
+    while((symb=infix[i++])!='\0')
+    {
+        if(symb=='(')
+            push(&opstk,symb);
+        else if(isalnum(symb))
+            postfix[j++]=symb;
+        else if(symb==')')
+        {
+            if(isempty(&opstk))
+            {
+                printf("invalid expression.");
+                exit(0);
+            }
+            topsymb=pop(&opstk);
+            while(topsymb!='(')
+            {
+                postfix[j++]=topsymb;
+                if(isempty(&opstk))
+                 {
+                    printf("invalid expression.");
+                    exit(0);
+                 }
+                topsymb=pop(&opstk);
+            }
+
+        }
+        else
+        {
+            while(!isempty(&opstk)&&!precedence(symb,opstk.item[opstk.top]))
+            {
+                postfix[j++]=pop(&opstk);
+
+            }
+            push(&opstk,symb);
+        }
+
+
+      }
+      while(!(isempty(&opstk)))
+      {
+        postfix[j++]=pop(&opstk);
+      }
+      postfix[j]='\0';
+      /* int x=0;
+       while(postfix[x]!='\0')
+       {
+           printf("%c",postfix[x]);
+        i++;
+       }  */
+}
+int main()
+{ char infix[50],postfix[50];
+  printf("enter your infix expression:");
+  gets(infix);
+  infixpostfix(infix,postfix);
+  printf("your required postfix expression is:");
+  puts(postfix);
+}

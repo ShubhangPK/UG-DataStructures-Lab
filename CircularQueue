@@ -1,0 +1,84 @@
+#define MAX 50
+#include <stdio.h>
+#include <stdlib.h>
+struct cqueue
+{
+    int items[MAX];
+    int front,rear;
+};
+typedef struct cqueue CQUEUE;
+int cqfull(CQUEUE*q)
+{
+    return(((q->rear)+1)%MAX==q->front);
+}
+int cqempty(CQUEUE*q1)
+{
+    return(q1->front==q1->rear);
+}
+void cqadd(CQUEUE*q2,int ele)
+{
+   if(cqfull(q2))
+   {
+       printf("circular queue full.");
+       exit(0);
+   }
+   q2->rear=(((q2->rear)+1)%MAX);
+   q2->items[q2->rear]=ele;
+}
+void cqremove(CQUEUE*q3,int *ele)
+{
+    if(cqempty(q3))
+    {
+        printf("circular queue is empty.");
+        exit(0);
+    }
+    //if(q3->front==0)
+    //(q3->front)+=1;
+    *ele=q3->items[((q3->front)+1)%MAX];
+     q3->front=(((q3->front)+1)%MAX);
+
+}
+void cqdisplay(CQUEUE*q4)
+{
+    if(cqempty(q4))
+    {
+
+        printf("circular queue empty.");
+        exit(0);
+    }
+    int i=(q4->front);
+    while(((i+1)%MAX)!=(q4->rear))
+    {
+        printf("%d\t",q4->items[i+1]);
+        i=((i+1)%MAX);
+    }
+    printf("%d",q4->items[i+1]);
+}
+
+int main()
+{ CQUEUE q5;
+  q5.front=0;
+  q5.rear=0;
+  int choice,d,x;
+
+  printf("\nCIRULAR QUEUE\n");
+  printf("1add\n2remove\n3display");
+  do{
+  printf("\nenter your choice:");
+  scanf("%d",&choice);
+  switch(choice)
+  {
+      case 1:printf("enter the element to be inserted:\n");
+             scanf("%d",&d);
+             cqadd(&q5,d);
+             break;
+      case 2:cqremove(&q5,&x);
+             printf("\nelement removed is %d",x);
+             break;
+      case 3:cqdisplay(&q5);
+             break;
+      default:printf("wrong choice\n");
+  }
+}while(choice>0&&choice<4);
+  return 0;
+}
